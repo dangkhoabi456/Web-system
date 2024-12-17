@@ -1,0 +1,32 @@
+
+Web system (hệ thống web) là một hệ thống phần mềm được xây dựng để hoạt động trên nền tảng web, sử dụng trình duyệt (browser) làm công cụ giao tiếp với người dùng. Nó thường bao gồm nhiều thành phần như cơ sở dữ liệu, máy chủ và giao diện người dùng. Web system đóng vai trò cung cấp dịch vụ, thông tin hoặc các chức năng cụ thể trên Internet hoặc mạng nội bộ (Intranet).
+
+Thành phần chính của Web System:
+Client-Side (Phía người dùng):
+
+Giao diện đồ họa (UI) người dùng tương tác, được xây dựng bằng HTML, CSS và JavaScript.
+Framework phổ biến: React.js, Vue.js, Angular.
+
+Server-Side (Phía máy chủ):
+Xử lý logic, yêu cầu của người dùng và giao tiếp với cơ sở dữ liệu.
+Ngôn ngữ lập trình: PHP, Python, Node.js, Java, ASP.NET, v.v.
+
+Cơ sở dữ liệu (Database):
+Nơi lưu trữ thông tin và dữ liệu.
+Các hệ quản trị cơ sở dữ liệu: MySQL, MongoDB, PostgreSQL, Oracle.
+
+*Giao thức HTTP/HTTPS:
+Là phương tiện để trao đổi dữ liệu (giao tiep) giữa trình duyệt và máy chủ.
+
+
+Ví dụ về Web System:
+Website bán hàng trực tuyến (Shopee, Lazada): Gồm giao diện người dùng, hệ thống thanh toán, giỏ hàng và quản lý sản phẩm.
+Hệ thống quản lý học viên (LMS): Lưu trữ thông tin học viên, khóa học và điểm số.
+Ứng dụng web như Gmail: Xử lý email trên nền tảng trình duyệt.
+Web system được phát triển để giải quyết nhu cầu cụ thể của người dùng như bán hàng, cung cấp thông tin, quản lý dữ liệu hoặc thực hiện các chức năng tự động hóa. Nếu bạn muốn xây dựng hoặc tìm hiểu sâu hơn về một web system, hãy bắt đầu với các kiến thức cơ bản về Frontend (HTML, CSS, JS) và Backend (Node.js, Python, Java) cùng cơ sở dữ liệu.
+
+
+
+
+
+
