@@ -1,91 +1,87 @@
-html{
-box-sizing: border-box;
-font-family: "Lucida Grande", Verdana, Geneva, Helvetica, Arial, sans-serif;
+html {
+    box-sizing: border-box;
+    font-family: "Lucida Grande", Verdana, Geneva, Helvetica, Arial, sans-serif;
 }
 
 /*Header start*/
 /*Navigation bar start*/
 
-.navigation-bar li{
-display: inline-block;
-color: white;
-padding: 0px 18px;
+.navigation-bar li {
+    display: inline-block;
+    color: white;
+    padding: 0px 18px;
 
-text-decoration: none;
-
-
+    text-decoration: none;
 }
-.navigation-bar li a{
-text-decoration: none;
-color: white;
+.navigation-bar li a {
+    text-decoration: none;
+    color: white;
 }
 
-#Header{
+#Header {
     float: left;
     position: fixed;
     top: 0;
-    left:0;
+    left: 0;
     right: 0;
     background-color: black;
     height: 40px;
     width: 100%;
 }
-#Header .navigation-bar input{
-width: 100px;
-} 
-.ti-angle-down{
-color: white;
+#Header .navigation-bar input {
+    width: 100px;
 }
-#Header .nav-arrow-down{
-font-size: 10px;
+.ti-angle-down {
+    color: white;
+}
+#Header .nav-arrow-down {
+    font-size: 10px;
 }
 /*Navigation bar end*/
 /*Header end*/
 /*Content start*/
-body{
-background-color: #e1dcc5;
+body {
+    background-color: #e1dcc5;
 }
-.box h3{
-display: flex;
-align-items: flex-start;
-margin-top: 0px;
+.box h3 {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 0px;
 }
-#content{
-margin-top: 50px;
+#content {
+    margin-top: 50px;
 }
-#content li{
-list-style:  none;
+#content li {
+    list-style: none;
 }
-.box{
-text-align: left;
-height: 150px;
-width: 600px;
-background-color: white;
-border-radius: 1px;
-padding: 16px;
-box-sizing: border-box;
+.box {
+    text-align: left;
+    height: 150px;
+    width: 600px;
+    background-color: white;
+    border-radius: 1px;
+    padding: 16px;
+    box-sizing: border-box;
 }
-.box h3{
+.box h3 {
     color: #02598b;
 }
 
-.small-box{
-display: inline-block;
-border: 1px solid black;
-background-color: #fcfbf7;
-margin-left: 15px;
+.small-box {
+    display: inline-block;
+    border: 1px solid black;
+    background-color: #fcfbf7;
+    margin-left: 15px;
 }
-.small-box h4{
+.small-box h4 {
     margin-bottom: 0px;
     margin-top: 0px;
     font-size: 10px;
-    
 }
-.small-box h6{
+.small-box h6 {
     margin-bottom: 0px;
     margin-top: 0px;
     font-size: 8px;
-     
 }
 
 /*Content end*/
