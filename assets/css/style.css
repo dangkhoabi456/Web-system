@@ -88,3 +88,39 @@ body {
 /*Footer start*/
 
 /*Footer end*/
+
+
+#Trending\ Books-list,
+#Classic\ Books-list,
+#Books\ We\ Love-list,
+#Recently-returned-list,
+#Romance-list,
+#Kids-list, 
+#Thrillers-list,
+#Textbooks-list {
+    display: flex; /* Hiển thị các phần tử theo hàng ngang */
+    gap: 30px; /* Khoảng cách giữa các cuốn sách */
+}
+
+.book-item {
+    display: flex;
+    flex-direction: column; /* Sắp xếp phần tử theo cột */
+    align-items: center; /* Canh giữa nội dung theo chiều ngang */
+}
+
+.book-item img {
+    margin-bottom: 10px; /* Thêm khoảng cách giữa ảnh và nút */
+}
+
+.book-item button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.book-item button:hover {
+    background-color: #0056b3; /* Thay đổi màu khi hover */
+} 
