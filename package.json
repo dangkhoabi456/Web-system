@@ -1,0 +1,25 @@
+{
+  "name": "web-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format:fix": "prettier --write --list-different .",
+    "format": "prettier --check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dangkhoabi456/Web-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dangkhoabi456/Web-system/issues"
+  },
+  "homepage": "https://github.com/dangkhoabi456/Web-system#readme",
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
+}
