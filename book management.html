@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+</head>
+<body>
+    <h1>Book Management</h1>
+
+    <form id="addBookForm">
+        <input type="text" id="title" placeholder="Title" required><br>
+        <input type="text" id="cover" placeholder="Cover URL" required><br>
+        <input type="text" id="author" placeholder="Author" required><br>
+        <textarea id="description" placeholder="Description" required></textarea><br>
+        <input type="date" id="date" required><br>
+        <input type="text" id="publisher" placeholder="Publisher" required><br>
+        <input type="text" id="language" placeholder="Language" required><br>
+        <input type="number" id="page" placeholder="Page Count" required><br>
+        <button type="submit">Add Book</button>
+    </form>
+
+    <h2>Book List</h2>
+    <div id="bookList"></div>
+
+    <script>
+        // Hàm để gửi yêu cầu POST thêm sách mới
+        async function addBook(event) {
+            event.preventDefault(); // Ngừng gửi form mặc định
+
+            // Lấy các giá trị từ form
+            const bookData = {
+                title: document.getElementById('title').value,
+                cover: document.getElementById('cover').value,
+                author: document.getElementById('author').value,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value,
+                publisher: document.getElementById('publisher').value,
+                language: document.getElementById('language').value,
+                page: document.getElementById('page').value,
+            };
+
+            // Lấy token từ localStorage hoặc sessionStorage (tuỳ thuộc vào nơi bạn lưu trữ token)
+            const token = localStorage.getItem('token');  // Hoặc lấy từ cookie, sessionStorage
+
+            if (!token) {
+                alert('You are not logged in!');
+                return;
+            }
+
+            // Gửi yêu cầu POST tới backend
+            try {
+                const response = await fetch('http://localhost:3000/api/book/new', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`  // Gửi token trong header
+                    },
+                    body: JSON.stringify(bookData)
+                });
+
+                if (response.ok) {
+                    alert('Book added successfully!');
+                    // Clear form after submit
+                    document.getElementById('addBookForm').reset();
+                    loadBooks(); // Tải lại danh sách sách sau khi thêm
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg}`);
+                }
+            } catch (error) {
+                console.error('Error adding book:', error);
+                alert('Failed to add book');
+            }
+        }
+
+        // Hàm để tải danh sách sách
+        async function loadBooks() {
+            try {
+                const response = await fetch('http://localhost:3000/api/book');
+                const books = await response.json();
+
+                const bookListContainer = document.getElementById('bookList');
+                bookListContainer.innerHTML = ''; // Dọn sạch danh sách cũ
+
+                // Hiển thị sách trong danh sách
+                books.forEach(book => {
+                    const bookElement = document.createElement('div');
+                    bookElement.innerHTML = `
+                        <h3>${book.title}</h3>
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>Description:</strong> ${book.description}</p>
+                        <p><strong>Publisher:</strong> ${book.publisher}</p>
+                        <p><strong>Language:</strong> ${book.language}</p>
+                        <p><strong>Pages:</strong> ${book.page}</p>
+                        <button onclick="deleteBook('${book._id}')">Delete</button>
+                        <hr>
+                    `;
+                    bookListContainer.appendChild(bookElement);
+                });
+            } catch (error) {
+                console.error('Error loading books:', error);
+                alert('Failed to load books');
+            }
+        }
+
+        // Hàm để xóa sách
+        async function deleteBook(bookId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('You are not logged in!');
+                return;
+            }
+
+            // Gửi yêu cầu DELETE tới backend để xóa sách
+            try {
+                const response = await fetch(`http://localhost:3000/api/book/delete/${bookId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`  // Gửi token trong header
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Book deleted successfully!');
+                    loadBooks(); // Tải lại danh sách sách sau khi xóa
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg}`);
+                }
+            } catch (error) {
+                console.error('Error deleting book:', error);
+                alert('Failed to delete book');
+            }
+        }
+
+        // Thêm sự kiện submit vào form
+        document.getElementById('addBookForm').addEventListener('submit', addBook);
+
+        // Tải danh sách sách khi trang web được tải
+        window.onload = loadBooks;
+    </script>
+</body>
+</html>
