@@ -1,94 +1,217 @@
-html{
-box-sizing: border-box;
-font-family: "Lucida Grande", Verdana, Geneva, Helvetica, Arial, sans-serif;
-}
-
-/*Header start*/
-/*Navigation bar start*/
-
-.navigation-bar li{
-display: inline-block;
-color: white;
-padding: 0px 18px;
-
-text-decoration: none;
-
-
-}
-.navigation-bar li a{
-text-decoration: none;
-color: white;
-}
-
-#Header{
-    float: left;
-    position: fixed;
-    top: 0;
-    left:0;
-    right: 0;
-    background-color: black;
-    height: 40px;
-    width: 100%;
-}
-#Header .navigation-bar input{
-width: 100px;
-} 
-.ti-angle-down{
-color: white;
-}
-#Header .nav-arrow-down{
-font-size: 10px;
-}
-/*Navigation bar end*/
-/*Header end*/
-/*Content start*/
-body{
-background-color: #e1dcc5;
-}
-.box h3{
-display: flex;
-align-items: flex-start;
-margin-top: 0px;
-}
-#content{
-margin-top: 50px;
-}
-#content li{
-list-style:  none;
-}
-.box{
-text-align: left;
-height: 150px;
-width: 600px;
-background-color: white;
-border-radius: 1px;
-padding: 16px;
-box-sizing: border-box;
-}
-.box h3{
-    color: #02598b;
-}
-
-.small-box{
-display: inline-block;
-border: 1px solid black;
-background-color: #fcfbf7;
-margin-left: 15px;
-}
-.small-box h4{
-    margin-bottom: 0px;
-    margin-top: 0px;
-    font-size: 10px;
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    }
+    html{
+    box-sizing: border-box;
+    font-family: "Lucida Grande", Verdana, Geneva, Helvetica, Arial, sans-serif;
+    }
     
-}
-.small-box h6{
-    margin-bottom: 0px;
+    /*Header start*/
+    /*Navigation bar start*/
+    
+    .navigation-bar li{
+    display: inline-block;
+    color: white;
+    padding: 0px 8px;
+    text-decoration: none;
+    line-height: 60px;
+    }
+    .navigation-bar li a{
+    text-decoration: none;
+    color: white;
+    padding: 20px 24px 21px;
+    }
+    .navigation-bar li a:hover{
+    background-color: bisque;
+    }
+    
+    #Header{
+        float: left;
+        position: fixed;
+        top: 0;
+        left:0;
+        right: 0;
+        background-color: black;
+        height: 60px;
+        width: 100%;
+    }
+    #Header .navigation-bar input{
+    width: 200px;
+    height: 40px;
+    border-radius: 5px;
+    margin-left: 700px;
+    } 
+    .ti-angle-down{
+    color: white;
+    }
+    #Header .nav-arrow-down{
+    font-size: 10px;
+    }
+    .navigation-bar button{
+    height: 40px;
+    width: 72px;
+    border-radius: 5px;
+    }
+    
+    /*Navigation bar end*/
+    /*Header end*/
+    /*Content start*/
+    body{
+    background-color: #e1dcc5;
+    }
+    .box h3{
+    display: flex;
+    align-items: flex-start;
     margin-top: 0px;
-    font-size: 8px;
-     
+    color: #02598b;
+    margin-bottom: 10px;
+    }
+    #content{
+    margin-top: 50px;
+    }
+    #content li{
+    list-style:  none;
+    }
+    .box{
+    text-align: left;
+    height: 3100px;
+    width: 1035px;
+    background-color: white;
+    border-radius: 1px;
+    padding: 16px;
+    box-sizing: border-box;
+    margin: 0 250px;
+     /*Note: cause bug, deal with it later */
+    text-align: center;
+    }
+    .box2{
+        text-align: left;
+        height: 6000px;
+        width: 1035px;
+        background-color: white;
+        border-radius: 1px;
+        padding: 16px;
+        box-sizing: border-box;
+        margin: 0 250px;
+        text-align: center;
+    }
+    
+    .small-box{
+    display: inline-block;
+    border: 1px solid black;
+    background-color: #fcfbf7;
+    margin-left: 15px;
+    width: 290px;
+    height: 120px;
+    
+    }
+    .small-box h4{
+        margin-bottom: 0px;
+        margin-top: 0px;
+        font-size: 20px;
+        
+    }
+    .small-box h6{
+        margin-bottom: 0px;
+        margin-top: 0px;
+        font-size: 16px;
+      
+    }
+    .line{
+        background-color: #f3edd7;
+        
+        padding: 3px 0px;
+        height: 280px;
+        width: 1000px;
+        
+    }
+    .box li a{
+    gap: 10px;
+    }
+    #book-list li {
+    margin:20px 0;
+    line-height: 55px;
+    }
+    #book-list li a{
+    text-decoration: none;
+    color: #02598b;
+    }
+    #Trending\ Books-list,
+#Classic\ Books-list,
+#Books\ We\ Love-list,
+#Recently-returned-list,
+#Romance-list,
+#Kids-list, 
+#Thrillers-list,
+#Textbooks-list {
+    display: flex; /* Hiển thị các phần tử theo hàng ngang */
+    gap: 30px; /* Khoảng cách giữa các cuốn sách */
+    justify-content: center; /*điều chỉnh các cuốn sách biển thị ở trung tâm */
 }
 
-/*Content end*/
-/*Footer start*/
+.book-item {
+    display: flex;
+    flex-direction: column; /* Sắp xếp phần tử theo cột */
+    align-items: center; /* Canh giữa nội dung theo chiều ngang */
+}
 
-/*Footer end*/
+.book-item img {
+    margin-bottom: 10px; /* Thêm khoảng cách giữa ảnh và nút */
+}
+
+.book-item button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.book-item button:hover {
+    background-color: #0056b3; /* Thay đổi màu khi hover */
+} 
+    /*Content end*/
+    /*Sign up and Log in starts*/
+    .Merge-header .log-in-box2{
+      display: flex;
+      flex-direction: row;
+    }
+    .log-in-box1{
+    width: 800px;
+    background-color: #f9f9f9;;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0;
+    
+    }
+    .log-in-box1 h2{
+    margin-bottom: 10px;
+    width: 70%;
+    color: Grey;
+    }
+    .log-in-box1 h3{
+    width: 70%;
+    }
+    .log-in-box2{
+    width: 550px;
+    height: 500px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left:0;
+    
+    }
+    /*Sign up and Log in ends*/
+    /*Footer start*/
+    #footer {
+    text-align: center;
+    }
+    /*Footer end*/
