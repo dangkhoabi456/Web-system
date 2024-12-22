@@ -148,6 +148,33 @@
             //     memberList.appendChild(listItem);
             // });
 
+            const deleteMember = async (phoneNumber) => {
+                try {
+                    const response = await fetch(`${apiUrl}/delete`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`, // Gửi token trong header
+                        },
+                        body: JSON.stringify({ phoneNumber }), // Gửi phoneNumber qua body
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.msg || "Failed to delete member");
+                    }
+
+                    alert("Member deleted successfully");
+                    // Reload member list
+                    document.getElementById("refreshMembers").click();
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert(error.message);
+                }
+            };
+
+
+            
             members.forEach((member) => {
                 const listItem = document.createElement("li");
                 listItem.textContent = `${member.fullName} (${member.phoneNumber})`;
@@ -155,7 +182,7 @@
                 // Tạo nút "Delete"
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "Delete";
-                deleteButton.addEventListener("click", () => deleteMember(member._id));
+                deleteButton.addEventListener("click", () => deleteMember(member.phoneNumber));
 
                 listItem.appendChild(deleteButton);
                 memberList.appendChild(listItem);
