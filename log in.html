@@ -1,76 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="img/png" href="./assets/img/favicon.png" />
-        <link rel="stylesheet" href="./assets/css/style.css" />
-        <link rel="stylesheet" href="./assets/icon/themify-icons-font/themify-icons/themify-icons.css" />
-        <title>On-library</title>
-    </head>
-    <body>
-        <!-- Header -->
-        <div id="Header">
-            <!-- Navigation bar -->
-            <ul class="navigation-bar">
-                <li><a href="">Homepage</a></li>
-                <li>
-                    <a href=""
-                        >Browse
-                        <i class="nav-arrow-down ti-angle-down"></i>
-                    </a>
-                    <ul class="sub-nav">
-                        <!-- Add sub-navigation items here if needed -->
-                    </ul>
-                </li>
-                <li>
-                    <input placeholder="Search" />
-                </li>
-                <li id="Log-in" style="padding-left: 0px; padding-right: 0px">
-                    <button>Log in</button>
-                </li>
-                <li id="Sign-up" style="padding-left: 0px; padding-right: 0px">
-                    <button>Sign up</button>
-                </li>
-            </ul>
-            <!-- Navigation bar end -->
-        </div>
-        <!-- Header end -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .login-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container button:hover {
+            background: #0056b3;
+        }
+        .message {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+        <div class="message" id="message"></div>
+    </div>
 
-        <!-- <div class="merge-header">
-            <div class="log-in-box1">
-                <h2>Log in</h2>
-                <h3>Log in to use your free On-Library card to borrow digital books</h3>
-                <h3>Please enter your email and password to access your On-Library account.</h3>
-                <h5>Email</h5>
-                <input placeholder="Email" />
-                <h5>Password</h5>
-                <input placeholder="Password" />
-            </div>
-        </div> -->
+    <script>
+        // JavaScript Logic
+        const apiUrl = "http://localhost:3000/api/auth/login";
 
-        <div class="merge-header">
-            <div class="log-in-box1">
-                <h2>Log in</h2>
-                <h3>Log in to use your free On-Library card to borrow digital books</h3>
-                <h3>Please enter your username and password to access your On-Library account.</h3>
-                
-                <!-- Thêm thẻ form để gửi thông tin đăng nhập -->
-                <form id="login-form">
-                    <h5>Username</h5>
-                    <!-- <input type="email" id="email" name="email" placeholder="Email" required /> -->
-                    <input type="text" id="username" name="username" placeholder="Username" required />
-                    
-                    <h5>Password</h5>
-                    <input type="password" id="password" name="password" placeholder="Password" required />
-                    
-                    <!-- Nút đăng nhập -->
-                    <button type="submit">Log in</button>
-                </form>
-            </div>
-        </div>
-        
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageElement = document.getElementById("message");
 
-        <script src="script.js"></script>
-    </body>
+            if (!username || !password) {
+                messageElement.textContent = "Please fill in all fields.";
+                return;
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.status === 200) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = `Welcome, ${data.user.username}!`;
+
+                    // Save token in localStorage
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("refreshToken", data.refreshToken);
+
+                    // Redirect or load another page
+                    setTimeout(() => {
+                        alert("You have successfully logged in!");
+                        window.location.href = "index.html"
+                    }, 2000);
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = data.message || "Login failed.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                messageElement.style.color = "red";
+                messageElement.textContent = "An error occurred. Please try again.";
+            }
+        }
+    </script>
+</body>
 </html>

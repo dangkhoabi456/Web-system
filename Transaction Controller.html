@@ -128,7 +128,7 @@
                         <td>${transaction.status}</td>
                         <td>
                             <button class="action-btn details-btn" onclick="viewTransaction('${transaction._id}')">Details</button>
-                            <button class="action-btn update-btn" onclick="updateTransaction('${transaction._id}')">Update</button>
+                            <button class="action-btn update-btn" onclick="updateTransaction('${transaction._id}', '${transaction.phoneNumber}')">Update</button>
                         </td>
                     `;
                     tableBody.appendChild(row);
@@ -184,7 +184,7 @@
         });
 
         // Update transaction status to "Returned"
-        async function updateTransaction(transactionId) {
+        async function updateTransaction(transactionId, phoneNumber) {
             if (!confirm("Mark this transaction as returned?")) return;
 
             try {
@@ -194,9 +194,10 @@
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`,
                     },
-                    body: JSON.stringify({ phoneNumber: "DUMMY_PHONE_NUMBER" }) // Replace with actual phoneNumber if required
+                    body: JSON.stringify({ phoneNumber }) // Replace with actual phoneNumber if required
                 });
 
+                
                 const result = await response.json();
 
                 if (response.ok) {
