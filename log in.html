@@ -3,49 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="img/png" href="./assets/img/favicon.png">
-    <link rel="stylesheet"  href="./assets/css/style.css">
-    <link rel="stylesheet" href="./assets/icon/themify-icons-font/themify-icons/themify-icons.css">
-    <title>On-library</title>
+    <title>Login Page</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .login-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 450px; /* Increased width */
+        }
+        .login-container h1 {
+            font-size: 28px; /* Increased font size */
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .login-container input {
+            width: 93%;
+            padding: 15px; /* Increased padding */
+            margin: 15px 0; /* Increased margin */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 20px; /* Increased font size */
+            margin-top: 30px
+        }
+        .login-container button {
+            width: 100%;
+            padding: 15px; /* Increased padding */
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+            margin-top: 30px;
+        }
+        .login-container button:hover {
+            background: #0056b3;
+        }
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 16px; /* Increased font size */
+            color: red;
+        }
+
+    </style>
 </head>
 <body>
-<!-- Header -->
-<div id="Header">
-<!--Navigation bar-->
-<ul class="navigation-bar">
-<li><a href=''>Homepage</a></li>
-<li><a href=''>Browse
-    <i class=" nav-arrow-down ti-angle-down"></i>
-</a>
-<ul class="sub-nav">
+    <div class="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+        <div class="message" id="message"></div>
+    </div>
 
-</ul>
-</li>
-<li>
-    <input placeholder="Search">
-</input>
-</li>
-<li id="Log-in" style="padding-left: 0px; padding-right: 0px;">
-    <button>Log in</button>
-</li>
-<li id="Sign-up" style="padding-left: 0px; padding-right: 0px;">
-    <button>Sign up</button>
-</li>
-</ul>
+    <script>
+        // JavaScript Logic
+        const apiUrl = "http://localhost:3000/api/auth/login";
 
-<!-- Navigation bar end-->
-</div>
-<!-- Header end -->
- <div class="merge-header">
-<div class="log-in-box1">
-<h2>Log in</h2>
-<h3>Log in to use your free On-Library card to borrow digital books</h3>
-<h3>Please enter your email and password to access your On-Library account.</h3>
-<h5>Email</h5>
-<input placeholder="Email">
-<h5>Password</h5>
-<input placeholder="Password">
-</div>
-<script src="script.js"></script>
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageElement = document.getElementById("message");
+
+            if (!username || !password) {
+                messageElement.textContent = "Please fill in all fields.";
+                return;
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.status === 200) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = `Welcome, ${data.user.username}!`;
+
+                    // Save token in localStorage
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("refreshToken", data.refreshToken);
+
+                    // Redirect or load another page
+                    setTimeout(() => {
+                        alert("You have successfully logged in!");
+                        window.location.href = "index.html"
+                    }, 2000);
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = data.message || "Login failed.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                messageElement.style.color = "red";
+                messageElement.textContent = "An error occurred. Please try again.";
+            }
+        }
+    </script>
 </body>
 </html>

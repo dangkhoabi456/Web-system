@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .form-left, .form-right {
+            width: 45%;
+            padding: 20px;
+            background-color: white;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="number"], input[type="date"], textarea {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #bookList {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+        }
+        .book {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .book h3 {
+            margin: 0;
+        }
+        .book p {
+            margin: 5px 0;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Management</h1>
+
+    <div class="container">
+        <div class="form-left">
+            <form id="addBookFormLeft">
+                <input type="text" id="title" placeholder="Title" required><br>
+                <input type="text" id="cover" placeholder="Cover URL" required><br>
+                <input type="text" id="author" placeholder="Author" required><br>
+                <textarea id="description" placeholder="Description" required></textarea><br>
+            </form>
+        </div>
+
+        <div class="form-right">
+            <form id="addBookFormRight">
+                <input type="date" id="date" required><br>
+                <input type="text" id="publisher" placeholder="Publisher" required><br>
+                <input type="text" id="language" placeholder="Language" required><br>
+                <input type="number" id="page" placeholder="Page Count" required><br>
+                <button type="submit">Add Book</button>
+            </form>
+        </div>
+    </div>
+
+
+    <h2>Book List</h2>
+    <div id="bookList"></div>
+
+    <script>
+        // Hàm để gửi yêu cầu POST thêm sách mới
+        async function addBook(event) {
+
+            event.preventDefault(); // Ngừng gửi form mặc định
+
+            // Lấy các giá trị từ form
+            const bookData = {
+                title: document.getElementById('title').value,
+                cover: document.getElementById('cover').value,
+                author: document.getElementById('author').value,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value,
+                publisher: document.getElementById('publisher').value,
+                language: document.getElementById('language').value,
+                page: document.getElementById('page').value,
+            };
+
+            const token = localStorage.getItem('token');  // Hoặc lấy từ cookie, sessionStorage
+
+            if (!token) {
+                alert('You are not logged in!');
+                return;
+            }
+
+            // Gửi yêu cầu POST tới backend
+            try {
+                const response = await fetch('http://localhost:3000/api/book/new', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`  // Gửi token trong header
+                    },
+                    body: JSON.stringify(bookData)
+                });
+
+                if (response.ok) {
+                    alert('Book added successfully!');
+                    // Clear form after submit
+                    document.getElementById('addBookFormLeft').reset();
+                    document.getElementById('addBookFormRight').reset();
+
+                    loadBooks(); // Tải lại danh sách sách sau khi thêm
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg}`);
+                }
+            } catch (error) {
+                console.error('Error adding book:', error);
+                alert('Failed to add book');
+            }
+        }
+
+        // Hàm để tải danh sách sách
+        async function loadBooks() {
+            try {
+                const response = await fetch('http://localhost:3000/api/book');
+                const books = await response.json();
+
+                const bookListContainer = document.getElementById('bookList');
+                bookListContainer.innerHTML = ''; // Dọn sạch danh sách cũ
+
+                // Hiển thị sách trong danh sách
+                books.forEach(book => {
+                    const bookElement = document.createElement('div');
+                    bookElement.classList.add('book');
+                    bookElement.innerHTML = `
+                        <h3>${book.title}</h3>
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>Description:</strong> ${book.description}</p>
+                        <p><strong>Publisher:</strong> ${book.publisher}</p>
+                        <p><strong>Language:</strong> ${book.language}</p>
+                        <p><strong>Pages:</strong> ${book.page}</p>
+                        <button class="delete-btn" onclick="deleteBook('${book._id}')">Delete</button>
+                    `;
+                    bookListContainer.appendChild(bookElement);
+                });
+            } catch (error) {
+                console.error('Error loading books:', error);
+                alert('Failed to load books');
+            }
+        }
+
+        // Hàm để xóa sách
+        async function deleteBook(bookId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('You are not logged in!');
+                return;
+            }
+
+            // Gửi yêu cầu DELETE tới backend để xóa sách
+            try {
+                const response = await fetch(`http://localhost:3000/api/book/delete/${bookId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`  // Gửi token trong header
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Book deleted successfully!');
+                    loadBooks(); // Tải lại danh sách sách sau khi xóa
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.msg}`);
+                }
+            } catch (error) {
+                console.error('Error deleting book:', error);
+                alert('Failed to delete book');
+            }
+        }
+
+        // Thêm sự kiện submit vào form
+        document.getElementById('addBookFormRight').addEventListener('submit', addBook);
+
+        // Tải danh sách sách khi trang web được tải
+        window.onload = loadBooks;
+    </script>
+
+</body>
+</html>

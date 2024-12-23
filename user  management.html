@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #0073e6, #005bb5);
+            color: #fff;
+            padding: 1.5em 0;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        main {
+            margin: 2em auto;
+            width: 90%;
+            max-width: 1000px;
+            background: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #005bb5;
+            margin-bottom: 1em;
+        }
+
+        form {
+            margin-bottom: 2em;
+        }
+
+        input, button {
+            display: block;
+            margin: 0.5em 0;
+            padding: 0.75em;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0073e6;
+            box-shadow: 0 0 8px rgba(0, 115, 230, 0.3);
+        }
+
+        button {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: #005bb5;
+        }
+
+        section {
+            margin-bottom: 2em;
+        }
+
+        #memberList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #memberList li {
+            background: #f9f9f9;
+            margin-bottom: 1em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #memberList li button {
+            background: #e60023;
+            color: #fff;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        #memberList li button:hover {
+            background: #c0001a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Library Member Management</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Add New Member</h2>
+            <form id="addMemberForm">
+                <input type="text" id="fullName" placeholder="Full Name" required>
+                <input type="text" id="phoneNumber" placeholder="Phone Number" required>
+                <button type="submit">Add Member</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Members List</h2>
+            <button id="refreshMembers">Refresh Members</button>
+            <ul id="memberList"></ul>
+        </section>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("You need to login first!");
+            window.location.href = 'log in.html';
+        }
+
+        const apiUrl = "http://localhost:3000/api/member";
+
+        document.getElementById("addMemberForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById("fullName").value;
+            const phoneNumber = document.getElementById("phoneNumber").value;
+
+            const response = await fetch(`${apiUrl}/new`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({ fullName, phoneNumber }),
+            });
+
+            const data = await response.json();
+            alert(data.msg);
+            document.getElementById("addMemberForm").reset();
+            document.getElementById("refreshMembers").click();
+        });
+
+        document.getElementById("refreshMembers").addEventListener("click", async () => {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch members");
+                }
+
+                const members = await response.json();
+                const memberList = document.getElementById("memberList");
+                memberList.innerHTML = "";
+
+                if (members.length === 0) {
+                    const noMembersMessage = document.createElement("li");
+                    noMembersMessage.textContent = "No members found.";
+                    memberList.appendChild(noMembersMessage);
+                    return;
+                }
+
+                const deleteMember = async (phoneNumber) => {
+                    try {
+                        const response = await fetch(`${apiUrl}/delete`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({ phoneNumber }),
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.msg || "Failed to delete member");
+                        }
+
+                        alert("Member deleted successfully");
+                        document.getElementById("refreshMembers").click();
+                    } catch (error) {
+                        console.error("Error:", error);
+                        alert(error.message);
+                    }
+                };
+
+                members.forEach((member) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${member.fullName} (${member.phoneNumber})`;
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.addEventListener("click", () => deleteMember(member.phoneNumber));
+
+                    listItem.appendChild(deleteButton);
+                    memberList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred while fetching members.");
+            }
+        });
+
+        document.getElementById("refreshMembers").click();
+    </script>
+</body>
+</html>
