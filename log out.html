@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Out</title>
+    <style>
+        body {
+            background-color: #f3edd7;
+            margin: 0;
+            display: flex;
+            justify-content: center; /* Centers content horizontally */
+            align-items: center;    /* Centers content vertically */
+            height: 100vh;          /* Ensures the body takes full viewport height */
+            flex-direction: column; /* Stacks items vertically */
+        }
+        h4, p {
+            margin: 10px 0; /* Adds some space between elements */
+            text-align: center;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            margin: 5px;
+            display: inline-block;
+            border-radius: 5px;
+            border: 1px solid;
+            padding: 10px;
+        }
+        #yes{
+            background-color: red;
+        }
+        #no {
+        background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h2>Are you sure you want to log out?</h2>
+    <p>
+        <a id="no" href="admin homepage.html">No, take me back</a> |
+        <a id="yes" href="homepage.html">Yes, log me out</a>
+    </p>
+</body>
+</html>
