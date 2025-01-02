@@ -156,10 +156,11 @@
     <form id="new-transaction-form">
         <label for="phoneNumber">Phone Number:</label>
         <input type="text" id="phoneNumber" required>
-        <label for="bookId">Book ID:</label>
+        <label for="bookId">Book Name:</label>
         <input type="text" id="bookId" required>
         <button type="submit">Create Transaction</button>
     </form>
+    
     <br>
 
     <!-- Bảng hiển thị giao dịch -->
@@ -186,12 +187,35 @@
         if (!token) {
             window.location.href = '/login.html'; // Điều hướng đến trang đăng nhập
         }
+
+
+        // Hàm tìm book_id từ book name
+        async function getBookIdByName(bookName) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/book/search?title=${bookName}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+                const data = await response.json();
+                if (data.books && data.books.length > 0) {
+                    return data.books[0]._id;  // Trả về bookId của cuốn sách đầu tiên tìm thấy
+                }
+                return null; // Nếu không tìm thấy sách
+            } catch (error) {
+                console.error('Error fetching book by name:', error);
+                return null;
+            }
+        }
+
         
         
         const apiBaseUrl = "http://localhost:3000/api/transaction";
 
         // Fetch all transactions and display in table
         async function fetchTransactions() {
+
             try {
                 const response = await fetch(apiBaseUrl, {
                     headers: {
@@ -244,7 +268,12 @@
             event.preventDefault();
 
             const phoneNumber = document.getElementById("phoneNumber").value;
-            const bookId = document.getElementById("bookId").value;
+            const bookId = await getBookIdByName(document.getElementById("bookId").value);
+
+            if (!bookId){
+                alert("Book name is incorrect!")
+                return
+            }
 
             try {
                 const response = await fetch(`${apiBaseUrl}/new`, {
