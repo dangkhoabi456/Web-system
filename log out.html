@@ -32,7 +32,7 @@
             background-color: red;
         }
         #no {
-        background-color: blue;
+        background-color: rgba(15, 222, 67, 0.849)
         }
     </style>
 </head>
@@ -40,7 +40,20 @@
     <h2>Are you sure you want to log out?</h2>
     <p>
         <a id="no" href="admin homepage.html">No, take me back</a> |
-        <a id="yes" href="homepage.html">Yes, log me out</a>
+        <a id="yes" href="homepage.html" onclick="logOut()" >Yes, log me out</a>
     </p>
+
+
+    <script>
+
+        function logOut() {
+
+            localStorage.clear();
+            window.location.href = "homepage.html";
+            
+        }
+        
+    </script>
+    
 </body>
 </html>
